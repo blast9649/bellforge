@@ -1,0 +1,39 @@
+[package]
+name = "bellforge"
+version = "0.1.0"
+edition = "2021"
+description = "Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
+authors = ["Your Name <you@example.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/yourname/bellforge"
+keywords = ["kettlebell", "workout", "timer", "fitness", "obsidian"]
+categories = ["gui", "sports"]
+
+[dependencies]
+# GUI - egui + eframe (wgpu backend by default)
+eframe = "0.31"
+egui = "0.31"
+
+# Core
+serde = { version = "1.0", features = ["derive"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Persistence
+toml = "0.8"
+xdg = "2.5"
+
+# For future audio (rodio will be added in PR 7)
+# rodio = { version = "0.20", optional = true }
+
+# Nice logging during development (Arch users love this)
+env_logger = "0.11"
+
+[features]
+# default = ["audio"]  # Uncomment when we add rodio
+# audio = ["dep:rodio"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"

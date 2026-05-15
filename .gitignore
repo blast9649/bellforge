@@ -1,0 +1,28 @@
+# Rust
+/target
+Cargo.lock
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# Build artifacts
+*.o
+*.so
+*.a
+
+# Packaging
+*.pkg.tar.*
+pkg/
+src/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config / test data (never commit)
+bellforge.toml
+*.log
+test_logs/

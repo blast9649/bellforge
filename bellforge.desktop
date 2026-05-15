@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=bellforge
+GenericName=Kettlebell Training Timer
+Comment=Guided kettlebell workouts with precise rest timers and Obsidian logging
+Exec=bellforge
+Icon=bellforge
+Terminal=false
+Categories=Utility;Sports;Fitness;
+Keywords=kettlebell;workout;timer;fitness;strength;obsidian;training;
+StartupWMClass=bellforge
+StartupNotify=true
+X-GNOME-UsesNotifications=true

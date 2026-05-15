@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple modern kettlebell icon for bellforge -->
+  <defs>
+    <linearGradient id="bellGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4c95d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d4a017;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Handle -->
+  <path d="M70 60 Q 128 25 186 60" fill="none" stroke="#3a3a3a" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- Bell body -->
+  <ellipse cx="128" cy="150" rx="72" ry="78" fill="url(#bellGradient)" stroke="#2f2f2f" stroke-width="6"/>
+
+  <!-- Bottom weight ring -->
+  <ellipse cx="128" cy="210" rx="52" ry="18" fill="#2f2f2f" stroke="#1f1f1f" stroke-width="4"/>
+
+  <!-- Highlight -->
+  <ellipse cx="95" cy="115" rx="25" ry="18" fill="#fff" fill-opacity="0.18"/>
+</svg>
