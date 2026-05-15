@@ -13,10 +13,10 @@ Cargo.lock
 *.so
 *.a
 
-# Packaging
+# Packaging (makepkg)
 *.pkg.tar.*
 pkg/
-src/
+# Do NOT ignore src/ — we need to track our Rust source code!
 
 # OS
 .DS_Store
