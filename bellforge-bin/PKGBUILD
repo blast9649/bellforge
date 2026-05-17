@@ -1,0 +1,41 @@
+# Maintainer: Your Name <you@example.com>
+pkgname=bellforge-bin
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Native Arch Linux kettlebell training timer with Obsidian Markdown logging (prebuilt binary)"
+arch=('x86_64')
+url="https://github.com/yourname/bellforge"
+license=('MIT OR Apache-2.0')
+depends=(
+  'alsa-lib'
+  'dbus'
+  'gcc-libs'
+  'glibc'
+)
+optdepends=(
+  'obsidian: for viewing exported workout logs'
+  'xdg-desktop-portal: for native file dialogs'
+)
+provides=('bellforge')
+conflicts=('bellforge')
+
+source=(
+  "bellforge-$pkgver-x86_64::https://github.com/yourname/bellforge/releases/download/v$pkgver/bellforge-x86_64-unknown-linux-gnu"
+  "bellforge-$pkgver.desktop::https://raw.githubusercontent.com/yourname/bellforge/v$pkgver/bellforge.desktop"
+  "bellforge-$pkgver.svg::https://raw.githubusercontent.com/yourname/bellforge/v$pkgver/assets/icon.svg"
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+package() {
+  # Binary
+  install -Dm755 "$srcdir/bellforge-$pkgver-x86_64" "$pkgdir/usr/bin/bellforge"
+
+  # Desktop integration
+  install -Dm644 "$srcdir/bellforge-$pkgver.desktop" "$pkgdir/usr/share/applications/bellforge.desktop"
+  install -Dm644 "$srcdir/bellforge-$pkgver.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/bellforge.svg"
+
+  # Documentation
+  install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md" 2>/dev/null || true
+}
+
+# vim:set ts=2 sw=2 et:

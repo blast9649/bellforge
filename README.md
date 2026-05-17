@@ -21,9 +21,34 @@ Full functionality (template editor, live session runner, Obsidian export, packa
 
 ---
 
-## Building on Arch Linux
+## Installation (Arch Linux)
 
-### Quick build (for development)
+### Recommended — Binary package (fastest)
+
+```bash
+# Using an AUR helper
+yay -S bellforge-bin
+# or
+paru -S bellforge-bin
+```
+
+This downloads the prebuilt binary from the GitHub release.
+
+### From source (AUR)
+
+```bash
+yay -S bellforge
+```
+
+### Manual build
+
+```bash
+git clone https://github.com/yourname/bellforge.git
+cd bellforge
+makepkg -si
+```
+
+### Development
 
 ```bash
 git clone https://github.com/yourname/bellforge.git
@@ -31,33 +56,51 @@ cd bellforge
 cargo run --release
 ```
 
-### Proper Arch packaging (recommended)
-
-```bash
-# Install build dependencies
-sudo pacman -S --needed rust cargo base-devel
-
-# Build the package
-makepkg -si
-```
-
-This will produce a proper `bellforge` binary installed system-wide with a working `.desktop` entry.
-
 ---
 
 ## Running
-
-After installation:
 
 ```bash
 bellforge
 ```
 
-Or launch from your application menu (search "bellforge").
+Or search for "bellforge" in your application menu.
 
 ---
 
-## Roadmap (from DESIGN_PLAN.md)
+## First Release (v0.1.0)
+
+This is the initial public release.
+
+**GitHub Release**: https://github.com/yourname/bellforge/releases/tag/v0.1.0
+
+The release workflow automatically builds and attaches:
+- `bellforge` (raw binary)
+- `bellforge-vX.Y.Z-x86_64.tar.gz` (binary + .desktop + icon — used by `bellforge-bin`)
+- `bellforge-vX.Y.Z-x86_64.zip`
+- `bellforge-vX.Y.Z-x86_64.pkg.tar.zst` (real Arch package built in an official container)
+
+**AUR Packages**:
+- `bellforge-bin` (recommended — downloads prebuilt binary)
+- `bellforge` (builds from source)
+
+---
+
+## Creating a Release (for maintainers)
+
+1. Update version in `Cargo.toml` and commit.
+2. Tag: `git tag -a v0.1.0 -m "v0.1.0"`
+3. Push tag: `git push origin v0.1.0`
+4. Create GitHub Release from the tag.
+5. Attach a stripped binary (built with `cargo build --release`).
+6. Update `sha256sums` in both `PKGBUILD` files.
+7. Push updated `PKGBUILD` + `.SRCINFO` to AUR for `bellforge` and `bellforge-bin`.
+
+---
+
+## Roadmap
+
+See `DESIGN_PLAN.md` for the original development plan.
 
 - **PR 1** — Foundation + packaging skeleton (current)
 - **PR 2** — Template Editor (flexible FlowItem + top-level Repeats)

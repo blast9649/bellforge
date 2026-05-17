@@ -29,6 +29,13 @@ xdg = "2.5"
 # Nice logging during development (Arch users love this)
 env_logger = "0.11"
 
+# Native file dialogs (used for Export as Markdown)
+# On KDE we want the native Plasma dialog via xdg-desktop-portal-kde
+rfd = "0.14"
+
+# Audio playback for rest timer chimes
+rodio = "0.20"
+
 [features]
 # default = ["audio"]  # Uncomment when we add rodio
 # audio = ["dep:rodio"]
