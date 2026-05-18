@@ -5,7 +5,7 @@ pkgrel=1
 pkgdesc="Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
 arch=('x86_64')
 url="https://github.com/blast9649/bellforge"
-license=('MIT OR Apache-2.0')
+license=('MIT')
 depends=(
   'alsa-lib'           # rodio audio backend
   'dbus'               # rfd + notifications
@@ -57,7 +57,7 @@ package() {
   install -Dm644 "README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
 
   # License
-  install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE" 2>/dev/null || true
+  install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 # vim:set ts=2 sw=2 et:
