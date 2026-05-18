@@ -26,19 +26,20 @@ sha256sums=('SKIP')   # Update these after creating the v0.1.0 GitHub release ta
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
-  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/.cargo"
   cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
 }
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/.cargo"
   export CARGO_TARGET_DIR=target
   cargo build --frozen --release --all-features
 }
 
 check() {
   cd "$srcdir/$pkgname-$pkgver"
+  export CARGO_HOME="$srcdir/.cargo"
   cargo test --frozen --all-features
 }
 
