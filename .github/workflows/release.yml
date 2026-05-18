@@ -127,12 +127,14 @@ jobs:
         run: |
           VERSION="${GITHUB_REF#refs/tags/v}"
           
+          chown -R builder: .
+          
           # Generate .SRCINFO for source package
-          makepkg --printsrcinfo > bellforge-${VERSION}.SRCINFO
+          sudo -u builder makepkg --printsrcinfo > bellforge-${VERSION}.SRCINFO
           
           # For bin package
           cd bellforge-bin
-          makepkg --printsrcinfo > ../bellforge-bin-${VERSION}.SRCINFO
+          sudo -u builder makepkg --printsrcinfo > ../bellforge-bin-${VERSION}.SRCINFO
           cd ..
 
       - name: Upload Arch package and .SRCINFO to GitHub Release
