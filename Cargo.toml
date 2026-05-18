@@ -1,6 +1,6 @@
 [package]
 name = "bellforge"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
 authors = ["blast9649"]

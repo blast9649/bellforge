@@ -1,6 +1,6 @@
 # Maintainer: blast9649 <https://github.com/blast9649>
 pkgname=bellforge
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
 arch=('x86_64')

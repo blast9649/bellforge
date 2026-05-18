@@ -1,6 +1,6 @@
 pkgbase = bellforge
 	pkgdesc = Native Arch Linux kettlebell training timer with Obsidian Markdown logging
-	pkgver = 0.1.0
+	pkgver = 0.1.1
 	pkgrel = 1
 	url = https://github.com/blast9649/bellforge
 	arch = x86_64
@@ -14,7 +14,7 @@ pkgbase = bellforge
 	depends = glibc
 	optdepends = obsidian: for viewing exported workout logs
 	optdepends = xdg-desktop-portal: for native file dialogs on Wayland/KDE
-	source = bellforge-0.1.0.tar.gz::https://github.com/blast9649/bellforge/archive/refs/tags/v0.1.0.tar.gz
+	source = bellforge-0.1.1.tar.gz::https://github.com/blast9649/bellforge/archive/refs/tags/v0.1.1.tar.gz
 	sha256sums = SKIP
 
 pkgname = bellforge
