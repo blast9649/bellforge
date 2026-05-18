@@ -4,7 +4,7 @@ pkgver=0.1.0
 pkgrel=1
 pkgdesc="Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
 arch=('x86_64')
-url="https://github.com/yourname/bellforge"
+url="https://github.com/blast9649/bellforge"
 license=('MIT OR Apache-2.0')
 depends=(
   'alsa-lib'           # rodio audio backend
@@ -21,7 +21,7 @@ optdepends=(
   'obsidian: for viewing exported workout logs'
   'xdg-desktop-portal: for native file dialogs on Wayland/KDE'
 )
-source=("$pkgname-$pkgver.tar.gz::https://github.com/yourname/bellforge/archive/refs/tags/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::https://github.com/blast9649/bellforge/archive/refs/tags/v$pkgver.tar.gz")
 sha256sums=('SKIP')   # Update these after creating the v0.1.0 GitHub release tarball
 
 prepare() {

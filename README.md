@@ -43,7 +43,7 @@ yay -S bellforge
 ### Manual build
 
 ```bash
-git clone https://github.com/yourname/bellforge.git
+git clone https://github.com/blast9649/bellforge.git
 cd bellforge
 makepkg -si
 ```
@@ -51,7 +51,7 @@ makepkg -si
 ### Development
 
 ```bash
-git clone https://github.com/yourname/bellforge.git
+git clone https://github.com/blast9649/bellforge.git
 cd bellforge
 cargo run --release
 ```
@@ -72,7 +72,7 @@ Or search for "bellforge" in your application menu.
 
 This is the initial public release.
 
-**GitHub Release**: https://github.com/yourname/bellforge/releases/tag/v0.1.0
+**GitHub Release**: https://github.com/blast9649/bellforge/releases/tag/v0.1.0
 
 The release workflow automatically builds and attaches:
 - `bellforge` (raw binary)

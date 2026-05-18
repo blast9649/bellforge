@@ -285,8 +285,7 @@ impl BellforgeApp {
 
         let path = match file_path {
             Some(p) => p,
-            None => return Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
+            None => return Err(std::io::Error::other(
                 "File dialog was closed or failed to open."
             )),
         };
@@ -331,8 +330,7 @@ impl BellforgeApp {
 
         let path = match file_path {
             Some(p) => p,
-            None => return Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
+            None => return Err(std::io::Error::other(
                 "File dialog was cancelled."
             )),
         };
@@ -422,11 +420,11 @@ fn get_next_action_label(session: &ActiveSession) -> String {
         match cue {
             SessionCue::Perform { name, .. } => {
                 // Look ahead to see if the next cue is the same exercise
-                if let Some(next_cue) = session.runner.cues.get(session.runner.current_index + 1) {
-                    if let SessionCue::Perform { name: next_name, .. } = next_cue {
-                        if next_name == name {
-                            return "Start Next Rep".to_string();
-                        }
+                if let Some(SessionCue::Perform { name: next_name, .. }) =
+                    session.runner.cues.get(session.runner.current_index + 1)
+                {
+                    if next_name == name {
+                        return "Start Next Rep".to_string();
                     }
                 }
                 "Start Next Exercise".to_string()
@@ -728,8 +726,7 @@ impl BellforgeApp {
                                             if inner_len == 0 {
                                                 ui.label(egui::RichText::new("    (no steps inside yet)").weak());
                                             } else {
-                                                for inner_i in 0..inner_len {
-                                                    let inner_item = &mut items[inner_i];
+                                                for (inner_i, inner_item) in items.iter_mut().enumerate() {
 
                                                     ui.horizontal(|ui| {
                                                         ui.add_space(18.0);
@@ -1105,16 +1102,16 @@ impl BellforgeApp {
                                 session.runner.toggle_pause();
                             }
 
-                            if session.runner.is_resting {
-                                if ui.button("⏭ Skip Rest").clicked() {
-                                    session.runner.skip_rest();
-                                    if session.auto_advance_after_rest {
-                                        // May be skipping the terminal rest. advance() on final sets finished flag.
-                                        // Return ignored only in that documented final-cue case.
-                                        let _ = session.runner.advance();
-                                    }
-                                    ui.ctx().request_repaint();
+                            if session.runner.is_resting
+                                && ui.button("⏭ Skip Rest").clicked()
+                            {
+                                session.runner.skip_rest();
+                                if session.auto_advance_after_rest {
+                                    // May be skipping the terminal rest. advance() on final sets finished flag.
+                                    // Return ignored only in that documented final-cue case.
+                                    let _ = session.runner.advance();
                                 }
+                                ui.ctx().request_repaint();
                             }
 
                             if ui.button("End Session").clicked() {

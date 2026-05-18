@@ -74,7 +74,7 @@ pub fn save_template(template: &WorkoutTemplate) -> std::io::Result<PathBuf> {
     let path = dir.join(filename);
 
     let toml = toml::to_string_pretty(template)
-        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+        .map_err(std::io::Error::other)?;
 
     fs::write(&path, toml)?;
     Ok(path)

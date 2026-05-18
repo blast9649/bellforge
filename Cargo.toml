@@ -5,7 +5,7 @@ edition = "2021"
 description = "Native Arch Linux kettlebell training timer with Obsidian Markdown logging"
 authors = ["Your Name <you@example.com>"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/yourname/bellforge"
+repository = "https://github.com/blast9649/bellforge"
 keywords = ["kettlebell", "workout", "timer", "fitness", "obsidian"]
 categories = ["gui", "sports"]
 

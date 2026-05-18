@@ -305,7 +305,7 @@ pub fn play_rest_end_chime() {
 /// post-exercise workout log. Matches the reference format with rich YAML frontmatter
 /// (title/aliases/date/time/datetime/type/workout_type/focus/tags/status/progress/source/exercises[]/created)
 /// + emoji H1 title, summary lines, 5-column exercises table (# | Exercise | Actual / Target | Weight | Sets),
-/// export footer, and **Notes** placeholder section.
+///   export footer, and **Notes** placeholder section.
 ///
 /// Takes the runner (for performed cues + actual_reps edits), the source WorkoutTemplate
 /// (for tags, description-as-focus, name), and pre-formatted timestamp strings (computed
@@ -494,7 +494,7 @@ fn expand_flow_item(item: &FlowItem, cues: &mut Vec<SessionCue>, template: &Work
                         .max(15); // minimum reasonable set rest
                     cues.push(SessionCue::Rest {
                         duration_s: rest,
-                        label: format!("Rest after set"),
+                        label: "Rest after set".to_string(),
                     });
                 }
             }

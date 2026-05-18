@@ -4,7 +4,7 @@ pkgver=0.1.0
 pkgrel=1
 pkgdesc="Native Arch Linux kettlebell training timer with Obsidian Markdown logging (prebuilt binary)"
 arch=('x86_64')
-url="https://github.com/yourname/bellforge"
+url="https://github.com/blast9649/bellforge"
 license=('MIT OR Apache-2.0')
 depends=(
   'alsa-lib'
@@ -20,9 +20,9 @@ provides=('bellforge')
 conflicts=('bellforge')
 
 source=(
-  "bellforge-$pkgver-x86_64::https://github.com/yourname/bellforge/releases/download/v$pkgver/bellforge-x86_64-unknown-linux-gnu"
-  "bellforge-$pkgver.desktop::https://raw.githubusercontent.com/yourname/bellforge/v$pkgver/bellforge.desktop"
-  "bellforge-$pkgver.svg::https://raw.githubusercontent.com/yourname/bellforge/v$pkgver/assets/icon.svg"
+  "bellforge-$pkgver-x86_64::https://github.com/blast9649/bellforge/releases/download/v$pkgver/bellforge-x86_64-unknown-linux-gnu"
+  "bellforge-$pkgver.desktop::https://raw.githubusercontent.com/blast9649/bellforge/v$pkgver/bellforge.desktop"
+  "bellforge-$pkgver.svg::https://raw.githubusercontent.com/blast9649/bellforge/v$pkgver/assets/icon.svg"
 )
 sha256sums=('SKIP' 'SKIP' 'SKIP')
 
