@@ -1,4 +1,4 @@
-# bellforge
+# 🛎️ bellforge
 
 **Native Arch Linux kettlebell training timer with Obsidian Markdown logging.**
 
@@ -6,46 +6,48 @@ Run precise, guided kettlebell sessions on your desktop with beautiful big timer
 
 Built the Arch way: lightweight, keyboard-first, Wayland native, trivial to package.
 
----
-
-## Status
-
-**v0.1.0** is the first public release. It includes the complete feature set:
-
-- Flexible workout template editor (exercises, sets, repeats, per-block rests)
-- Live guided sessions with large visible countdown timer
-- Real audio chime (rodio) at the end of each rest
-- Post-session review with editable actual reps + rich Obsidian Markdown export
-- Fully automated Arch Linux packaging + release pipeline
+[![Latest Release](https://img.shields.io/github/v/release/blast9649/bellforge?style=flat-square)](https://github.com/blast9649/bellforge/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 
 ---
 
-## Installation (Arch Linux)
+## ✨ Features
 
-### Recommended — Binary package (fastest)
+- **Flexible workout template editor** — exercises, sets, repeats, per-block rests
+- **Live guided sessions** — large visible countdown timer
+- **Real audio chime** — rodio-powered chime at the end of each rest
+- **Post-session review** — editable actual reps + rich Obsidian Markdown export with full YAML frontmatter
+- **Arch-native packaging** — automated builds for binaries, tarballs, zips, and real `.pkg.tar.zst` packages
 
-```bash
-# Using an AUR helper
-yay -S bellforge-bin
-# or
-paru -S bellforge-bin
-```
+---
 
-This downloads the prebuilt binary from the GitHub release.
+## 📦 Installation
 
-### From source (AUR)
+### Prebuilt Releases (Easiest)
 
-```bash
-yay -S bellforge
-```
+Download the latest release from **[GitHub Releases](https://github.com/blast9649/bellforge/releases/latest)**:
 
-### Manual build
+- `bellforge` — raw optimized binary
+- `bellforge-*.tar.gz` / `.zip` — binary + `.desktop` + icon
+- `bellforge-*.pkg.tar.zst` — ready-to-install Arch package (built in official container)
+
+Extract or install the package and run `bellforge`.
+
+### From Source
 
 ```bash
 git clone https://github.com/blast9649/bellforge.git
 cd bellforge
+
+# Build the binary
+cargo build --release
+
+# Or build the full Arch package (recommended for system integration)
 makepkg -si
 ```
+
+The binary ends up at `target/release/bellforge` (or installed system-wide after `makepkg`).
 
 ### Development
 
@@ -57,52 +59,45 @@ cargo run --release
 
 ---
 
-## Running
+## ▶️ Running
 
 ```bash
 bellforge
 ```
 
-Or search for "bellforge" in your application menu.
+Or launch it from your application menu / desktop environment.
 
 ---
 
-## First Release (v0.1.0)
+## 📋 Releases & Changelog
 
-This is the initial public release.
+- **Latest release**: [v0.1.1](https://github.com/blast9649/bellforge/releases/tag/v0.1.1)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **All releases**: [GitHub Releases page](https://github.com/blast9649/bellforge/releases)
 
-**GitHub Release**: https://github.com/blast9649/bellforge/releases/tag/v0.1.0
-
-The release workflow automatically builds and attaches:
-- `bellforge` (raw binary)
-- `bellforge-0.1.0-x86_64.tar.gz` (binary + .desktop + icon — used by `bellforge-bin`)
-- `bellforge-0.1.0-x86_64.zip`
-- `bellforge-0.1.0-x86_64.pkg.tar.zst` (real Arch package built in an official container)
-
-**AUR Packages**:
-- `bellforge-bin` (recommended — downloads prebuilt binary)
-- `bellforge` (builds from source)
+v0.1.1 focused on packaging reliability and build fixes (including Cargo.lock tracking and container build improvements).
 
 ---
 
-## Creating a Release (for maintainers)
+## 🛠️ For Maintainers
 
-See `RELEASE-DAY-CHECKLIST.md` for the exact one-page process used for v0.1.0 (including the automated GitHub workflow that builds both the tarball and real Arch package).
+- [RELEASE-DAY-CHECKLIST.md](RELEASE-DAY-CHECKLIST.md) — one-page release process
+- [RELEASE.md](RELEASE.md) — detailed release automation notes
 
 ---
 
-## Future Plans
+## 🔮 Future Plans
 
-See `DESIGN_PLAN.md` for the original roadmap. Possible future enhancements:
+See [DESIGN_PLAN.md](DESIGN_PLAN.md) for the full roadmap. Some ideas:
 
 - Better history / past workout browser
-- Notifications and sleep inhibit during sessions
+- Notifications + sleep inhibit during sessions
 - aarch64 builds
 - More built-in presets and template sharing
 
 ---
 
-## Philosophy
+## 💭 Philosophy
 
 - **Local first** — Your training data lives in your Obsidian vault.
 - **Correct timers** — Wall-clock `Instant`-based, survives suspend.
@@ -111,9 +106,8 @@ See `DESIGN_PLAN.md` for the original roadmap. Possible future enhancements:
 
 ---
 
-## License
+## 📄 License
 
-MIT or Apache-2.0 (your choice).
+Licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 ---
-
