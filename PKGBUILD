@@ -27,7 +27,7 @@ sha256sums=('SKIP')   # Update these after creating the v0.1.0 GitHub release ta
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   export CARGO_HOME="$srcdir/.cargo"
-  cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+  cargo fetch --target "$CARCH-unknown-linux-gnu"
 }
 
 build() {
