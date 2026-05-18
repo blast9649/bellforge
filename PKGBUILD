@@ -1,4 +1,4 @@
-# Maintainer: Your Name <you@example.com>
+# Maintainer: blast9649 <https://github.com/blast9649>
 pkgname=bellforge
 pkgver=0.1.0
 pkgrel=1
