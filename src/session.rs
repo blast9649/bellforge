@@ -22,10 +22,7 @@ pub enum SessionCue {
         weight_kg: Option<f32>,
     },
     /// The user is in a rest period.
-    Rest {
-        duration_s: u32,
-        label: String,
-    },
+    Rest { duration_s: u32, label: String },
 }
 
 /// Manages the execution of a workout session.
@@ -289,7 +286,10 @@ pub fn play_rest_end_chime() {
                     }
                 }
                 Err(e) => {
-                    eprintln!("[bellforge] audio: no default output device for chime ({})", e);
+                    eprintln!(
+                        "[bellforge] audio: no default output device for chime ({})",
+                        e
+                    );
                 }
             }
         });
@@ -323,11 +323,22 @@ pub fn build_session_review_markdown(
     // Collect one entry per Perform cue (flattened sets appear as separate rows, each sets=1)
     let mut performed: Vec<(String, u32, u32, String, u32)> = vec![]; // (name, actual, target, weight_str, sets)
     for i in 0..runner.cues.len() {
-        if let SessionCue::Perform { name, target_reps, weight_kg } = &runner.cues[i] {
+        if let SessionCue::Perform {
+            name,
+            target_reps,
+            weight_kg,
+        } = &runner.cues[i]
+        {
             let actual = runner.actual_reps.get(i).copied().unwrap_or(*target_reps);
             let weight_str = weight_kg.map_or_else(
                 || "—".to_string(),
-                |w| if w.fract() == 0.0 { format!("{}", w as i32) } else { format!("{}", w) },
+                |w| {
+                    if w.fract() == 0.0 {
+                        format!("{}", w as i32)
+                    } else {
+                        format!("{}", w)
+                    }
+                },
             );
             performed.push((name.clone(), actual, *target_reps, weight_str, 1));
         }
@@ -401,9 +412,15 @@ pub fn build_session_review_markdown(
     // This fixes the previous raw-literal bug (stray newlines + extra " chars) and adds escaping.
     // All 6 quoted scalars now emit exactly as in the reference (no malformation).
     md.push_str("---\n");
-    md.push_str(&format!("title: {}\n", yaml_quote(&format!("{} | {}", template.name, date))));
+    md.push_str(&format!(
+        "title: {}\n",
+        yaml_quote(&format!("{} | {}", template.name, date))
+    ));
     md.push_str("aliases:\n");
-    md.push_str(&format!("  - {}\n", yaml_quote(&format!("Workout Log: {}", template.name))));
+    md.push_str(&format!(
+        "  - {}\n",
+        yaml_quote(&format!("Workout Log: {}", template.name))
+    ));
     md.push_str(&format!("date: {}\n", date));
     md.push_str(&format!("time: {}\n", yaml_quote(time)));
     md.push_str(&format!("datetime: {}\n", datetime));
@@ -460,7 +477,9 @@ pub fn build_session_review_markdown(
     }
 
     md.push_str("\n---\n\n");
-    md.push_str("*Exported from bellforge — actual reps reviewed and edited after the session.*\n\n");
+    md.push_str(
+        "*Exported from bellforge — actual reps reviewed and edited after the session.*\n\n",
+    );
     md.push_str("**Notes**:  \n");
     md.push_str("_Add any post-session notes, RPE, how it felt, or form cues here._\n");
 
@@ -563,7 +582,9 @@ mod tests {
         if let SessionCue::Perform { target_reps, .. } = &runner.cues[0] {
             assert_eq!(runner.actual_reps[0], *target_reps);
             assert_eq!(runner.actual_reps[0], 10);
-        } else { panic!("expected Perform"); }
+        } else {
+            panic!("expected Perform");
+        }
         // Second cue Rest → 0
         assert_eq!(runner.actual_reps[1], 0);
         assert!(!runner.finished);
@@ -720,7 +741,10 @@ _Add any post-session notes, RPE, how it felt, or form cues here._
         // If !auto on last rest, finished should stay false until manual advance from the final cue
         let mut t = WorkoutTemplate::new("Terminal Rest");
         t.rest_between_exercises_s = 0;
-        t.flow = vec![FlowItem::exercise("Work", 3, 1), FlowItem::rest(10, "Last Rest")];
+        t.flow = vec![
+            FlowItem::exercise("Work", 3, 1),
+            FlowItem::rest(10, "Last Rest"),
+        ];
         let mut runner = SessionRunner::from_template(&t);
         // cues: P(0), R(1 last)
         let _ = runner.advance(); // now on last Rest
@@ -729,7 +753,7 @@ _Add any post-session notes, RPE, how it felt, or form cues here._
         runner.is_resting = false;
         runner.rest_start_time = None;
         assert!(!runner.finished); // flag not set, because we didn't call advance() yet
-        // Now manual "Start Next" on terminal rest calls advance on final cue → sets flag
+                                   // Now manual "Start Next" on terminal rest calls advance on final cue → sets flag
         let _ = runner.advance();
         assert!(runner.finished);
         assert!(runner.is_finished());
@@ -758,12 +782,15 @@ _Add any post-session notes, RPE, how it felt, or form cues here._
         // End-to-end for the "End Session → review" partial abort path.
         let mut t = WorkoutTemplate::new("Partial Abort");
         t.rest_between_exercises_s = 0;
-        t.flow = vec![FlowItem::exercise("First", 5, 1), FlowItem::exercise("Second", 10, 1)];
+        t.flow = vec![
+            FlowItem::exercise("First", 5, 1),
+            FlowItem::exercise("Second", 10, 1),
+        ];
         let mut runner = SessionRunner::from_template(&t);
         // Simulate some work on first exercise
         runner.add_rep();
         runner.add_rep(); // actual[0] = 2
-        // User hits End Session (simulated)
+                          // User hits End Session (simulated)
         runner.mark_finished();
         let md = build_session_review_markdown(
             &runner,
@@ -778,7 +805,7 @@ _Add any post-session notes, RPE, how it felt, or form cues here._
         assert!(md.contains("Partial (1/2 steps)")); // 2 cues (0 rests), still on first -> progress 1/2
         assert!(md.contains("First"));
         assert!(md.contains("2 / 5")); // partial preserved
-        // Second still at target (never reached)
+                                       // Second still at target (never reached)
         assert!(md.contains("10 / 10"));
         assert!(md.contains("**Notes**:")); // ensure new format sections are there even for partial
     }

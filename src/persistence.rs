@@ -16,9 +16,7 @@ pub fn templates_dir() -> PathBuf {
     let xdg_dirs = xdg::BaseDirectories::with_prefix("bellforge")
         .unwrap_or_else(|_| xdg::BaseDirectories::new().unwrap());
 
-    xdg_dirs
-        .get_data_home()
-        .join("templates")
+    xdg_dirs.get_data_home().join("templates")
 }
 
 /// Ensure the templates directory exists.
@@ -45,14 +43,12 @@ pub fn load_user_templates() -> Vec<WorkoutTemplate> {
             let path = entry.path();
             if path.extension().and_then(|s| s.to_str()) == Some("toml") {
                 match fs::read_to_string(&path) {
-                    Ok(content) => {
-                        match toml::from_str::<WorkoutTemplate>(&content) {
-                            Ok(template) => templates.push(template),
-                            Err(e) => {
-                                eprintln!("Failed to parse template {}: {}", path.display(), e);
-                            }
+                    Ok(content) => match toml::from_str::<WorkoutTemplate>(&content) {
+                        Ok(template) => templates.push(template),
+                        Err(e) => {
+                            eprintln!("Failed to parse template {}: {}", path.display(), e);
                         }
-                    }
+                    },
                     Err(e) => {
                         eprintln!("Failed to read {}: {}", path.display(), e);
                     }
@@ -73,8 +69,7 @@ pub fn save_template(template: &WorkoutTemplate) -> std::io::Result<PathBuf> {
     let filename = format!("{}.toml", safe_name);
     let path = dir.join(filename);
 
-    let toml = toml::to_string_pretty(template)
-        .map_err(std::io::Error::other)?;
+    let toml = toml::to_string_pretty(template).map_err(std::io::Error::other)?;
 
     fs::write(&path, toml)?;
     Ok(path)

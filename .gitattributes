@@ -1,0 +1,21 @@
+# Exclude development-only files/directories from GitHub tag source tarballs
+# (git archive) and the archives consumed by AUR source packages (bellforge PKGBUILD).
+# This keeps user-facing source tarballs small and free of dev notes, CI, etc.
+
+.github/ export-ignore
+scripts/ export-ignore
+bellforge-bin/ export-ignore
+
+agent.md export-ignore
+DESIGN_PLAN.md export-ignore
+CONTRIBUTING.md export-ignore
+RELEASE*.md export-ignore
+"2026-05-16 - Kettlebell .md" export-ignore
+".RELEASE-DAY-CHECKLIST.md.kate-swp" export-ignore
+
+# Generated packaging helper (not required inside source tarballs)
+.SRCINFO export-ignore
+
+# Git housekeeping files (not part of distributed source)
+.gitattributes export-ignore
+.gitignore export-ignore

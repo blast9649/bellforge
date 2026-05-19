@@ -49,11 +49,7 @@ impl WorkoutTemplate {
         }
 
         // Assume ~25 seconds average "work" per exercise set (very rough)
-        let exercise_sets: u32 = self
-            .flow
-            .iter()
-            .map(|i| i.count_exercise_sets())
-            .sum();
+        let exercise_sets: u32 = self.flow.iter().map(|i| i.count_exercise_sets()).sum();
 
         total + exercise_sets * 25
     }
@@ -66,7 +62,12 @@ impl WorkoutTemplate {
     pub fn summary(&self) -> String {
         let steps = self.flow.len();
         let rounds = self.count_rounds();
-        format!("{} steps • ~{} min • {} rounds", steps, self.estimated_duration_minutes(), rounds)
+        format!(
+            "{} steps • ~{} min • {} rounds",
+            steps,
+            self.estimated_duration_minutes(),
+            rounds
+        )
     }
 
     fn count_rounds(&self) -> u32 {
@@ -110,7 +111,9 @@ pub enum FlowItem {
 impl FlowItem {
     pub fn display_name(&self) -> String {
         match self {
-            FlowItem::Exercise { name, reps, sets, .. } => {
+            FlowItem::Exercise {
+                name, reps, sets, ..
+            } => {
                 if *sets > 1 {
                     format!("{} — {} × {} reps", name, sets, reps)
                 } else {
@@ -127,15 +130,12 @@ impl FlowItem {
     }
 
     /// Returns the rest that should be used after this item, respecting per-item overrides.
-    pub fn effective_rest_after(
-        &self,
-        global_exercise_rest: u32,
-        global_round_rest: u32,
-    ) -> u32 {
+    pub fn effective_rest_after(&self, global_exercise_rest: u32, global_round_rest: u32) -> u32 {
         match self {
-            FlowItem::Exercise { rest_after_exercise_s, .. } => {
-                rest_after_exercise_s.unwrap_or(global_exercise_rest)
-            }
+            FlowItem::Exercise {
+                rest_after_exercise_s,
+                ..
+            } => rest_after_exercise_s.unwrap_or(global_exercise_rest),
             FlowItem::Rest { duration_s, .. } => *duration_s,
             FlowItem::Repeat { .. } => global_round_rest,
         }
@@ -144,7 +144,12 @@ impl FlowItem {
     /// Rough rest time contributed by this item (used for time estimation).
     pub fn estimated_rest_seconds(&self, global_ex: u32, global_round: u32) -> u32 {
         match self {
-            FlowItem::Exercise { rest_after_set_s, rest_after_exercise_s, sets, .. } => {
+            FlowItem::Exercise {
+                rest_after_set_s,
+                rest_after_exercise_s,
+                sets,
+                ..
+            } => {
                 let per_set = rest_after_set_s.unwrap_or(global_ex);
                 let after_ex = rest_after_exercise_s.unwrap_or(global_ex);
                 // Between sets + final rest after the exercise
@@ -153,7 +158,10 @@ impl FlowItem {
             FlowItem::Rest { duration_s, .. } => *duration_s,
             FlowItem::Repeat { count, items } => {
                 // Very approximate: repeat the inner items + round rest
-                let inner: u32 = items.iter().map(|i| i.estimated_rest_seconds(global_ex, global_round)).sum();
+                let inner: u32 = items
+                    .iter()
+                    .map(|i| i.estimated_rest_seconds(global_ex, global_round))
+                    .sum();
                 inner * count + global_round * (count.saturating_sub(1))
             }
         }

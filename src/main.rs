@@ -103,7 +103,7 @@ struct BellforgeApp {
     pending_add_to_repeat_idx: Option<usize>,
 
     // For inner mutations inside Repeat blocks
-    pending_inner_delete: Option<(usize, usize)>,   // (repeat_index, inner_index)
+    pending_inner_delete: Option<(usize, usize)>, // (repeat_index, inner_index)
     pending_inner_move_up: Option<(usize, usize)>,
     pending_inner_move_down: Option<(usize, usize)>,
 
@@ -235,7 +235,9 @@ impl BellforgeApp {
 
     /// Associated function (no &self needed — pure dialog + write). Called as
     /// BellforgeApp::export_template... or Self::... from within the impl.
-    fn export_template_as_markdown_with_dialog(template: &WorkoutTemplate) -> std::io::Result<PathBuf> {
+    fn export_template_as_markdown_with_dialog(
+        template: &WorkoutTemplate,
+    ) -> std::io::Result<PathBuf> {
         // Generate the Markdown content first
         let mut md = String::new();
 
@@ -245,26 +247,60 @@ impl BellforgeApp {
             md.push_str(&format!("{}\n\n", desc));
         }
 
-        md.push_str(&format!("**Estimated Duration**: ~{} minutes\n", template.estimated_duration_minutes()));
-        md.push_str(&format!("**Rest between exercises**: {}s\n", template.rest_between_exercises_s));
-        md.push_str(&format!("**Rest between rounds**: {}s\n\n", template.rest_between_rounds_s));
+        md.push_str(&format!(
+            "**Estimated Duration**: ~{} minutes\n",
+            template.estimated_duration_minutes()
+        ));
+        md.push_str(&format!(
+            "**Rest between exercises**: {}s\n",
+            template.rest_between_exercises_s
+        ));
+        md.push_str(&format!(
+            "**Rest between rounds**: {}s\n\n",
+            template.rest_between_rounds_s
+        ));
 
         md.push_str("## Workout Flow\n\n");
 
         for (i, item) in template.flow.iter().enumerate() {
             match item {
-                FlowItem::Exercise { name, reps, sets, weight_kg, .. } => {
+                FlowItem::Exercise {
+                    name,
+                    reps,
+                    sets,
+                    weight_kg,
+                    ..
+                } => {
                     let weight = weight_kg.map_or("bodyweight".to_string(), |w| format!("{}kg", w));
-                    md.push_str(&format!("{}. **{}** — {} × {} reps @ {}\n", i + 1, name, sets, reps, weight));
+                    md.push_str(&format!(
+                        "{}. **{}** — {} × {} reps @ {}\n",
+                        i + 1,
+                        name,
+                        sets,
+                        reps,
+                        weight
+                    ));
                 }
                 FlowItem::Rest { label, duration_s } => {
-                    md.push_str(&format!("{}. *{}* — {} seconds\n", i + 1, label, duration_s));
+                    md.push_str(&format!(
+                        "{}. *{}* — {} seconds\n",
+                        i + 1,
+                        label,
+                        duration_s
+                    ));
                 }
                 FlowItem::Repeat { count, items } => {
                     md.push_str(&format!("{}. **Repeat ×{}**\n", i + 1, count));
                     for inner in items {
-                        if let FlowItem::Exercise { name, reps, weight_kg, .. } = inner {
-                            let weight = weight_kg.map_or("bodyweight".to_string(), |w| format!("{}kg", w));
+                        if let FlowItem::Exercise {
+                            name,
+                            reps,
+                            weight_kg,
+                            ..
+                        } = inner
+                        {
+                            let weight =
+                                weight_kg.map_or("bodyweight".to_string(), |w| format!("{}kg", w));
                             md.push_str(&format!("    - {} × {} @ {}\n", name, reps, weight));
                         }
                     }
@@ -285,9 +321,11 @@ impl BellforgeApp {
 
         let path = match file_path {
             Some(p) => p,
-            None => return Err(std::io::Error::other(
-                "File dialog was closed or failed to open."
-            )),
+            None => {
+                return Err(std::io::Error::other(
+                    "File dialog was closed or failed to open.",
+                ))
+            }
         };
 
         std::fs::write(&path, md)?;
@@ -299,7 +337,9 @@ impl BellforgeApp {
     /// exactly matching the reference format in "2026-05-16 - Kettlebell .md".
     /// Uses the stored template for metadata and the pure helper for the body.
     /// Associated function (no &self) per reviewer nit.
-    fn export_session_review_as_markdown_with_dialog(session: &ActiveSession) -> std::io::Result<PathBuf> {
+    fn export_session_review_as_markdown_with_dialog(
+        session: &ActiveSession,
+    ) -> std::io::Result<PathBuf> {
         let now = ::chrono::Local::now();
         let date = now.format("%Y-%m-%d").to_string();
         let time = now.format("%H:%M").to_string();
@@ -317,10 +357,21 @@ impl BellforgeApp {
         );
 
         // Native save dialog (rfd respects the DE — KDE, GNOME, etc.)
-        let safe_name = session.template.name.to_lowercase().chars()
-            .map(|c| if c.is_alphanumeric() || c == '-' || c == '_' { c } else { '-' })
+        let safe_name = session
+            .template
+            .name
+            .to_lowercase()
+            .chars()
+            .map(|c| {
+                if c.is_alphanumeric() || c == '-' || c == '_' {
+                    c
+                } else {
+                    '-'
+                }
+            })
             .collect::<String>();
-        let default_filename = format!("workout-log-{}-{}.md", now.format("%Y%m%d-%H%M"), safe_name);
+        let default_filename =
+            format!("workout-log-{}-{}.md", now.format("%Y%m%d-%H%M"), safe_name);
 
         let file_path = rfd::FileDialog::new()
             .set_title("Export Session Review as Markdown")
@@ -330,9 +381,7 @@ impl BellforgeApp {
 
         let path = match file_path {
             Some(p) => p,
-            None => return Err(std::io::Error::other(
-                "File dialog was cancelled."
-            )),
+            None => return Err(std::io::Error::other("File dialog was cancelled.")),
         };
 
         std::fs::write(&path, md)?;
@@ -397,7 +446,8 @@ impl eframe::App for BellforgeApp {
         // Global bottom status bar
         egui::TopBottomPanel::bottom("status").show(ctx, |ui| {
             ui.horizontal(|ui| {
-                ui.label(format!("v0.1.0 • PR 3 — {}", 
+                ui.label(format!(
+                    "v0.1.0 • PR 3 — {}",
                     match self.current_view {
                         View::Dashboard => "Dashboard",
                         View::TemplateEditor => "Template Editor",
@@ -420,8 +470,9 @@ fn get_next_action_label(session: &ActiveSession) -> String {
         match cue {
             SessionCue::Perform { name, .. } => {
                 // Look ahead to see if the next cue is the same exercise
-                if let Some(SessionCue::Perform { name: next_name, .. }) =
-                    session.runner.cues.get(session.runner.current_index + 1)
+                if let Some(SessionCue::Perform {
+                    name: next_name, ..
+                }) = session.runner.cues.get(session.runner.current_index + 1)
                 {
                     if next_name == name {
                         return "Start Next Rep".to_string();
@@ -470,14 +521,17 @@ impl BellforgeApp {
                                 ui.label(egui::RichText::new(&template.name).size(17.0).strong());
                                 ui.label(egui::RichText::new(template.summary()).size(12.0).weak());
                             });
-                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                if ui.button("Start").clicked() {
-                                    builtin_start = Some(idx);
-                                }
-                                if ui.button("Edit").clicked() {
-                                    builtin_edit = Some(idx);
-                                }
-                            });
+                            ui.with_layout(
+                                egui::Layout::right_to_left(egui::Align::Center),
+                                |ui| {
+                                    if ui.button("Start").clicked() {
+                                        builtin_start = Some(idx);
+                                    }
+                                    if ui.button("Edit").clicked() {
+                                        builtin_edit = Some(idx);
+                                    }
+                                },
+                            );
                         });
                     });
                     ui.add_space(4.0);
@@ -525,20 +579,27 @@ impl BellforgeApp {
                         ui.group(|ui| {
                             ui.horizontal(|ui| {
                                 ui.vertical(|ui| {
-                                    ui.label(egui::RichText::new(&template.name).size(17.0).strong());
-                                    ui.label(egui::RichText::new(template.summary()).size(12.0).weak());
+                                    ui.label(
+                                        egui::RichText::new(&template.name).size(17.0).strong(),
+                                    );
+                                    ui.label(
+                                        egui::RichText::new(template.summary()).size(12.0).weak(),
+                                    );
                                 });
-                                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                    if ui.small_button("🗑").clicked() {
-                                        delete_user = Some(idx);
-                                    }
-                                    if ui.button("Start").clicked() {
-                                        start_user = Some(idx);
-                                    }
-                                    if ui.button("Edit").clicked() {
-                                        edit_user = Some(idx);
-                                    }
-                                });
+                                ui.with_layout(
+                                    egui::Layout::right_to_left(egui::Align::Center),
+                                    |ui| {
+                                        if ui.small_button("🗑").clicked() {
+                                            delete_user = Some(idx);
+                                        }
+                                        if ui.button("Start").clicked() {
+                                            start_user = Some(idx);
+                                        }
+                                        if ui.button("Edit").clicked() {
+                                            edit_user = Some(idx);
+                                        }
+                                    },
+                                );
                             });
                         });
                         ui.add_space(4.0);
@@ -907,9 +968,13 @@ impl BellforgeApp {
 
                         ui.horizontal(|ui| {
                             ui.label("Reps:");
-                            ui.add(egui::DragValue::new(&mut self.pending_exercise_reps).range(1..=50));
+                            ui.add(
+                                egui::DragValue::new(&mut self.pending_exercise_reps).range(1..=50),
+                            );
                             ui.label("Sets:");
-                            ui.add(egui::DragValue::new(&mut self.pending_exercise_sets).range(1..=20));
+                            ui.add(
+                                egui::DragValue::new(&mut self.pending_exercise_sets).range(1..=20),
+                            );
                         });
 
                         ui.add_space(6.0);
@@ -917,7 +982,10 @@ impl BellforgeApp {
                         ui.horizontal(|ui| {
                             ui.label("Weight (kg):");
                             let mut w = self.pending_exercise_weight.unwrap_or(24.0);
-                            if ui.add(egui::DragValue::new(&mut w).range(0.0..=100.0).speed(0.5)).changed() {
+                            if ui
+                                .add(egui::DragValue::new(&mut w).range(0.0..=100.0).speed(0.5))
+                                .changed()
+                            {
                                 self.pending_exercise_weight = if w > 0.0 { Some(w) } else { None };
                             }
                         });
